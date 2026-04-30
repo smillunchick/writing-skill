@@ -52,6 +52,54 @@ or, if your harness supports slash-style invocation:
 
 You do not need to specify a mode. The skill routes automatically.
 
+## How it works
+
+```mermaid
+flowchart TD
+    A[User request] --> B{Entry point}
+
+    B -->|Topic or goal| C[blank_page]
+    B -->|Bullets, notes, transcript| D[notes_to_draft]
+    B -->|Existing draft| E{Intent}
+    B -->|Writing samples| F[voice_profile]
+    B -->|Wants options / best version| G[variants]
+
+    E -->|Improve| H[revise]
+    E -->|Diagnose| I[audit]
+    E -->|Less AI-ish| J[humanize]
+    E -->|Final cleanup| K[finish]
+
+    C --> L{Depth}
+    D --> L
+    G --> L
+    H --> L
+    J --> L
+
+    L -->|quick| M[Single draft or edit + light audit]
+    L -->|standard| N[3 variants + best-parts synthesis]
+    L -->|deep| O[5-6 variants + scored tournament + revision pass]
+
+    N --> P[Harvest best opening, claim, detail, structure, ending]
+    O --> P
+    P --> Q[Composite draft]
+
+    M --> R[AI-slop / human-specificity check]
+    Q --> R
+    I --> S[Span-specific audit report]
+    F --> T[Reusable voice profile]
+    K --> U[Ready-to-send polish]
+
+    R --> V{Missing real human detail?}
+    V -->|yes| W[Flag placeholders / ask for concrete detail]
+    V -->|no| X[Final draft]
+
+    W --> X
+    S --> Y[Fix plan or optional rewrite]
+    T --> Z[Reusable prompt block]
+```
+
+At a high level, the skill routes the request by input type and intent, chooses a depth, runs the appropriate writing workflow, then finishes with a human-specificity check. The most distinctive path is the draft tournament: generate multiple genuinely different candidates, harvest the strongest parts, and assemble a composite stronger than any single draft.
+
 ## Modes
 
 | Mode | Use when | Output |
